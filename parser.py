@@ -9,7 +9,7 @@ class Parser:
     def doParsing(self):
         database = Database()
 
-        for number in range(1):
+        for number in range(3):
 
             # главная или нет
             if self.nextPage == '':
@@ -23,19 +23,16 @@ class Parser:
             soupNewsList = BeautifulSoup(newsListUrl.text, "html.parser")
 
             # получить адрес следующей страницы пагинации
-            nextPage = soupNewsList.find(id='navigation_1_next_page').get('href')
+            self.nextPage = soupNewsList.find(id='navigation_1_next_page').get('href')
 
             # собрать новости на текущей странице
             newsListArr = soupNewsList.find('ul', class_='bigline').findAll('a', class_='sys')
 
             # обработать данные о каждой новости
-            # for i in range(len(newsListArr)):
-            for i in range(1):
+            for i in range(len(newsListArr)):
                 # ссылка на новость
                 currentNewsShortUrl = newsListArr[i].get('href')
-                #currentNewsFullUrl = self.siteUrl + newsListArr[i].get('href')
-                currentNewsFullUrl = 'https://bloknot-volgograd.ru/news/okolo-khrama-aleksandra-nevskogo-v-volgograde-fona'
-
+                currentNewsFullUrl = self.siteUrl + newsListArr[i].get('href')
 
                 # поля новости
                 newsData = requests.get(currentNewsFullUrl)
