@@ -9,8 +9,13 @@ class Parser:
     def doParsing(self):
         database = Database()
 
-        for number in range(1):
+        # узнать общее кол-во страниц пагинации
+        first = requests.get(self.siteUrl)
+        soupFirst = BeautifulSoup(first.text, "html.parser")
+        lastPageNumber = int(soupFirst.find('div', class_='navigation-pages').findAll('a')[-1].text)
 
+        for page in range(3):
+            #print(page + 1)
             # главная или нет
             if self.nextPage == '':
                 newsListUrl = self.siteUrl
