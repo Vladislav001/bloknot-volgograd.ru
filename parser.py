@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from database import Database
 import requests
 
 # class News(object):
@@ -40,3 +41,6 @@ for number in range(1):
 
         # newsObject = News(name)
         # print(newsObject)
+
+database = Database()
+database.addRecord( {"footg" : "bagggr" })
