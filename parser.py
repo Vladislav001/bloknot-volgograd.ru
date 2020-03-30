@@ -9,7 +9,7 @@ class Parser:
     def doParsing(self):
         database = Database()
 
-        for number in range(3):
+        for number in range(1):
 
             # главная или нет
             if self.nextPage == '':
@@ -44,7 +44,10 @@ class Parser:
 
                 # поля новости
                 name = soupNews.find('h1').text
-                date = ''
+                date = soupNewsList.find('a', href=currentNewsShortUrl + '#comments').find_parent('span').next_element.next_element
+                # обработаем дату
+                date = self.converteDate(date)
+
                 href = currentNewsFullUrl
                 text = soupNews.find('div', class_='news-text').text
                 count_comments = int(soupNewsList.find('a', href=currentNewsShortUrl + '#comments').text)
@@ -52,13 +55,16 @@ class Parser:
                 # запись в БД
                 database.addRecord({
                     "name" : name,
-                    "date" : date,
+                    #"date" : date,
                     "href" : href,
                     "text" : text,
                     "count_comments" : count_comments
                 })
 
-
+    def converteDate(self, date):
+        newDate = date
+        #TODO чекать: менять сегодня, вчера
+        return newDate
 
 parser = Parser()
 parser.doParsing()
