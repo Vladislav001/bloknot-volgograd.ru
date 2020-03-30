@@ -7,7 +7,9 @@ class Parser:
     nextPage = ''
 
     def doParsing(self):
-        for number in range(2):
+        database = Database()
+
+        for number in range(1):
 
             # главная или нет
             if self.nextPage == '':
@@ -18,30 +20,46 @@ class Parser:
             newsListUrl = requests.get(newsListUrl)
 
             # страница
-            soup = BeautifulSoup(newsListUrl.text, "html.parser")
+            soupNewsList = BeautifulSoup(newsListUrl.text, "html.parser")
 
             # получить адрес следующей страницы пагинации
-            nextPage = soup.find(id='navigation_1_next_page').get('href')
+            nextPage = soupNewsList.find(id='navigation_1_next_page').get('href')
 
             # собрать новости на текущей странице
-            newsList = soup.find('ul', class_='bigline').findAll('a', class_='sys')
+            newsListArr = soupNewsList.find('ul', class_='bigline').findAll('a', class_='sys')
 
             # обработать данные о каждой новости
-            for i in range(len(newsList)):
+            for i in range(len(newsListArr)):
                 # ссылка на новость
-                currentNewsUrl = self.siteUrl + newsList[i].get('href')
+                currentNewsShortUrl = newsListArr[i].get('href')
+                currentNewsFullUrl = self.siteUrl + newsListArr[i].get('href')
+                #currentNewsFullUrl = 'https://bloknot-volgograd.ru/news/nazvana-srednyaya-zarabotnaya-plata-v-malykh-i-sre-1206800'
 
                 # поля новости
-                newsData = requests.get(currentNewsUrl)
+                newsData = requests.get(currentNewsFullUrl)
                 soupNews = BeautifulSoup(newsData.text, "html.parser")
-                name = soupNews.find('h1').text
-                print(name)
 
-                # newsObject = News(name)
-                # print(newsObject)
+                # поля новости
+                name = soupNews.find('h1').text
+                data = ''
+                href = currentNewsFullUrl
+
+                textArr = soupNews.find('div', class_='news-text').findAll('p')
+                text = ''
+                for pTag in range(len(textArr)):
+                    text += textArr[pTag].text
+
+                count_comments = int(soupNewsList.find('a', href=currentNewsShortUrl + '#comments').text)
+
+                # запись в БД
+                database.addRecord( {
+                    "name" : name,
+                    "data" : data,
+                    "href" : href,
+                    "text" : text,
+                    "count_comments" : count_comments
+                })
+
 
 parser = Parser()
 parser.doParsing()
-
-# database = Database()
-# database.addRecord( {"footg" : "bagggr" })
