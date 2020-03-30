@@ -10,9 +10,7 @@ class Database:
             "href": data['href']
         },
             {
-                "$set": {
-                    "count_comments": data['count_comments']
-                }
+                "$set": data
             },
             upsert=True
         )

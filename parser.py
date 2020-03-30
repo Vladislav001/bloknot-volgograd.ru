@@ -29,36 +29,38 @@ class Parser:
             newsListArr = soupNewsList.find('ul', class_='bigline').findAll('a', class_='sys')
 
             # обработать данные о каждой новости
-            for i in range(len(newsListArr)):
+            # for i in range(len(newsListArr)):
+            for i in range(1):
                 # ссылка на новость
                 currentNewsShortUrl = newsListArr[i].get('href')
-                currentNewsFullUrl = self.siteUrl + newsListArr[i].get('href')
-                #currentNewsFullUrl = 'https://bloknot-volgograd.ru/news/nazvana-srednyaya-zarabotnaya-plata-v-malykh-i-sre-1206800'
+                #currentNewsFullUrl = self.siteUrl + newsListArr[i].get('href')
+                currentNewsFullUrl = 'https://bloknot-volgograd.ru/news/okolo-khrama-aleksandra-nevskogo-v-volgograde-fona'
+
 
                 # поля новости
                 newsData = requests.get(currentNewsFullUrl)
                 soupNews = BeautifulSoup(newsData.text, "html.parser")
 
+                # почистить от js
+                for script in soupNews(["script", "style"]):
+                    script.decompose()  # rip it out
+
                 # поля новости
                 name = soupNews.find('h1').text
-                data = ''
+                date = ''
                 href = currentNewsFullUrl
-
-                textArr = soupNews.find('div', class_='news-text').findAll('p')
-                text = ''
-                for pTag in range(len(textArr)):
-                    text += textArr[pTag].text
-
+                text = soupNews.find('div', class_='news-text').text
                 count_comments = int(soupNewsList.find('a', href=currentNewsShortUrl + '#comments').text)
 
                 # запись в БД
-                database.addRecord( {
+                database.addRecord({
                     "name" : name,
-                    "data" : data,
+                    "date" : date,
                     "href" : href,
                     "text" : text,
                     "count_comments" : count_comments
                 })
+
 
 
 parser = Parser()
