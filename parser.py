@@ -14,7 +14,7 @@ class Parser:
         soupFirst = BeautifulSoup(first.text, "html.parser")
         lastPageNumber = int(soupFirst.find('div', class_='navigation-pages').findAll('a')[-1].text)
 
-        for page in range(3):
+        for page in range(1):
             #print(page + 1)
             # главная или нет
             if self.nextPage == '':
@@ -45,7 +45,7 @@ class Parser:
 
                 # почистить от js
                 for script in soupNews(["script", "style"]):
-                    script.decompose()  # rip it out
+                    script.decompose()
 
                 # поля новости
                 name = soupNews.find('h1').text
@@ -56,7 +56,7 @@ class Parser:
                 href = currentNewsFullUrl
                 text = soupNews.find('div', class_='news-text').text
                 count_comments = int(soupNewsList.find('a', href=currentNewsShortUrl + '#comments').text)
-
+                print(name)
                 # запись в БД
                 database.addRecord({
                     "name" : name,
