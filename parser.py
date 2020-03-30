@@ -13,9 +13,9 @@ class Parser:
 
             # главная или нет
             if self.nextPage == '':
-                newsListUrl = 'https://bloknot-volgograd.ru/'
+                newsListUrl = self.siteUrl
             else:
-                newsListUrl = 'https://bloknot-volgograd.ru' + self.nextPage
+                newsListUrl = self.siteUrl + self.nextPage
 
             newsListUrl = requests.get(newsListUrl)
 

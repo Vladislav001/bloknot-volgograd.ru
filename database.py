@@ -6,4 +6,13 @@ class Database:
     collection = db["news"]
 
     def addRecord(self, data):
-        self.collection.insert_one(data)
+        self.collection.find_one_and_update({
+            "href": data['href']
+        },
+            {
+                "$set": {
+                    "count_comments": data['count_comments']
+                }
+            },
+            upsert=True
+        )
