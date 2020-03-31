@@ -8,6 +8,8 @@ class Database:
 
     def addRecord(self, data):
         self.collection.find_one_and_update({
+            "name": data['name'],
+            "date": data['date'],
             "href": data['href']
         },
             {
