@@ -15,7 +15,7 @@ class Parser:
         soupFirst = BeautifulSoup(first.text, "html.parser")
         lastPageNumber = int(soupFirst.find('div', class_='navigation-pages').findAll('a')[-1].text) # для for page in range(1):
 
-        for page in range(1):
+        for page in range(2):
             #print(page + 1)
             # главная или нет
             if self.nextPage == '':

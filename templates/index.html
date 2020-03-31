@@ -20,12 +20,10 @@
         </div>
         <button type="submit" class="btn btn-primary">Обновить</button>
     </form>
-
-
+    <a href="?page={{ nextPage }}">След</a>
     <table class="table table-striped">
   <thead>
     <tr>
-      <th scope="col">#</th>
       <th scope="col">Название</th>
       <th scope="col">Дата</th>
       <th scope="col">Кол-во комментариев</th>
@@ -35,24 +33,17 @@
   <tbody>
    {% for record in records %}
     <tr>
-        <th scope="row">1</th>
          <td><a href="{{ record.href }}" target="_blank"> {{ record.name }} </a></td>
          <td> {{ record.date }} </td>
          <td> {{ record.count_comments }} </td>
          <td> {{ record.text }} </td>
     </tr>
     {% endfor %}
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
+
   </tbody>
 </table>
 
 </div>
-
 
 </body>
 </html>

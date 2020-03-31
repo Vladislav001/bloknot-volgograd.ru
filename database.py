@@ -23,3 +23,9 @@ class Database:
     def getAllRecords(self):
         data = self.collection.find({})
         return list(data)
+
+    # Пагинация
+    def getPaginationRecords(self, pageNum, pageSize):
+        skips = int(pageSize) * (int(pageNum) - 1)
+        data = self.collection.find({}).skip(skips).limit(pageSize)
+        return list(data)
