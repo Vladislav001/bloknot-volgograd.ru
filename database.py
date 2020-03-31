@@ -6,6 +6,7 @@ class Database:
     db = client["parser"]
     collection = db["news"]
 
+    # Добавить/обновить запись в БД
     def addRecord(self, data):
         self.collection.find_one_and_update({
             "name": data['name'],
@@ -17,3 +18,8 @@ class Database:
             },
             upsert=True
         )
+
+    # Получить все записи из БД - не рекомендуется использовать при кол-ве > 1000
+    def getAllRecords(self):
+        data = self.collection.find({})
+        return list(data)
