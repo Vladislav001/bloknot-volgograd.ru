@@ -1,0 +1,18 @@
+encoding "utf8";
+
+import "base.proto";
+import "articles_base.proto";
+import "bloknot-volgograd_types.proto";
+
+TAuxDicArticle "знаменитости"
+{
+	key = {"tomita:famous_people_grammar.cxx" type=CUSTOM}
+}
+
+TAuxDicArticle "места"
+{
+	key = {"tomita:popular_places_grammar.cxx" type=CUSTOM}
+}
+
+
+

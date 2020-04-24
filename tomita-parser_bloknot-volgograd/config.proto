@@ -1,0 +1,19 @@
+encoding "utf8";
+
+TTextMinerConfig {
+	Dictionary = "./tomita-parser_bloknot-volgograd/bloknot-volgograd_dic.gzt"
+	Input = { File = "./tomita-parser_bloknot-volgograd/input.txt" }
+	Output = { File = "./tomita-parser_bloknot-volgograd/output.txt" Format = text}
+
+	Articles = [
+		{Name = "знаменитости"}
+		{Name = "места"}
+		]
+
+	Facts = [
+		{Name = "PersonFact"}
+		{Name = "PlaceFact"}
+		]	
+
+	PrettyOutput = "tomita-parser_bloknot-volgograd/pretty_output.html"
+}
