@@ -58,10 +58,16 @@ FI -> FI_1 | FI_2 |FI_3 |FI_4 |FI_5 |FI_6;
 
 FIO -> FullFIO | InitialWithFIO | FIOWithInitial | InitialsWithFIO | FIOWithInitials | FI;
 
-//FamousDesignator -> "знаменитый" | "уважаемый" | "заслуженный";
+// Слова, которые говорят, что реч идет о Волгограде или волгоградце
+VolgogradDesignator -> "волгоград" | "волгоградский" | "волгоградец" | "волгоградка";
 
-PersonName -> FIO interp(PersonFact.Name);
+// Слова, обозначающую значимую личность
+FamousDesignators -> "писатель" | "губернатор" | "депутат" | "знаменитый" | "уважаемый" | "заслуженный";
 
+// Поиск в предложении известных волгоградцев
+SentenceWithVolgogradFamousPerson_1 -> (AnyWord*) VolgogradDesignator (AnyWord*) FamousDesignators (AnyWord*) (VolgogradDesignator) (AnyWord*) FIO interp(PersonFact.Name) (AnyWord*) (VolgogradDesignator) (AnyWord*);
+SentenceWithVolgogradFamousPerson_2 -> (AnyWord*) (VolgogradDesignator) (AnyWord*) FamousDesignators (AnyWord*) VolgogradDesignator (AnyWord*) FIO interp(PersonFact.Name) (AnyWord*) (VolgogradDesignator) (AnyWord*);
+SentenceWithVolgogradFamousPerson_3 -> (AnyWord*) (VolgogradDesignator) (AnyWord*) FamousDesignators (AnyWord*) (VolgogradDesignator) (AnyWord*) FIO interp(PersonFact.Name) (AnyWord*) VolgogradDesignator (AnyWord*);
 
-
+SentenceWithVolgogradFamousPerson -> SentenceWithVolgogradFamousPerson_1 | SentenceWithVolgogradFamousPerson_2 | SentenceWithVolgogradFamousPerson_3;
 

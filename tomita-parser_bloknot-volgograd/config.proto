@@ -1,9 +1,15 @@
 encoding "utf8";
 
 TTextMinerConfig {
-	Dictionary = "./tomita-parser_bloknot-volgograd/bloknot-volgograd_dic.gzt"
-	Input = { File = "./tomita-parser_bloknot-volgograd/input.txt" }
-	Output = { File = "./tomita-parser_bloknot-volgograd/output.txt" Format = text}
+	Dictionary = "./bloknot-volgograd.ru/tomita-parser_bloknot-volgograd/bloknot-volgograd_dic.gzt"
+	Input = { 
+		Dir = "bloknot-volgograd.ru/tomita-parser_bloknot-volgograd/input_articles"
+	}
+	Output = { 
+		File = "./bloknot-volgograd.ru/tomita-parser_bloknot-volgograd/output.txt" 
+		Format = text
+		Mode = append
+	}
 
 	Articles = [
 		{Name = "знаменитости"}
@@ -15,5 +21,5 @@ TTextMinerConfig {
 		{Name = "PlaceFact"}
 		]	
 
-	PrettyOutput = "tomita-parser_bloknot-volgograd/pretty_output.html"
+	PrettyOutput = "./bloknot-volgograd.ru/tomita-parser_bloknot-volgograd/pretty_output.html"
 }
