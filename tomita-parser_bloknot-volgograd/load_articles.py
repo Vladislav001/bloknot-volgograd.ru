@@ -36,9 +36,11 @@ db = Database()
 
 # Сохранение текста статей по отдельным файлам, где имя файлов - ид статьи в бд
 print("Saving articles...")
+
+saving_folder_name = "input_articles"
 articles = db.getAllRecords()
 for article in articles:
-    output_file_name = str(article["_id"]) + ".txt"
+    output_file_name = saving_folder_name + "/" + str(article["_id"]) + ".txt"
     f = open(output_file_name, 'w')
     f.write(article["text"]);
 
