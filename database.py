@@ -5,6 +5,7 @@ class Database:
     #client = MongoClient('mongodb://localhost:27017/')
     db = client["parser"]
     collectionNews = db["news"]
+    collectionPhrases = db["phrases"]
 
     # Добавить/обновить запись в БД (новости)
     def addNews(self, data):
@@ -28,4 +29,23 @@ class Database:
     def getPaginationNews(self, pageNum, pageSize):
         skips = int(pageSize) * (int(pageNum) - 1)
         data = self.collectionNews.find({}).skip(skips).limit(pageSize)
+        return list(data)
+
+    # Добавить запись в БД (фразы - предложения с фактами)
+    def addPhrase(self, data):
+        self.collectionPhrases.insert_one({
+            "sentence": data['sentence'],
+            "facts": data['facts'],  # [{ 'type': '' 'name': '' }, { 'type': '' 'name': '' }],
+            }
+        )
+
+     # Получить все записи из БД - не рекомендуется использовать при кол-ве > 1000 (фразы - предложения с фактами)
+    def getAllPhrases(self):
+        data = self.collectionPhrases.find({})
+        return list(data)
+
+    # Пагинация (фразы - предложения с фактами)
+    def getPaginationPhrases(self, pageNum, pageSize):
+        skips = int(pageSize) * (int(pageNum) - 1)
+        data = self.collectionPhrases.find({}).skip(skips).limit(pageSize)
         return list(data)
