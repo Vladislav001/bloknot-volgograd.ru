@@ -59,7 +59,7 @@ class Parser:
                 count_comments = int(soupNewsList.find('a', href=currentNewsShortUrl + '#comments').text)
 
                 # запись в БД
-                database.addRecord({
+                database.addNews({
                     "name" : name,
                     "date" : date,
                     "href" : href,
