@@ -65,7 +65,7 @@ def save_classifier(classifier):
     :param classifier:
     :return:
     """
-    f = open('tonality-analysis/my_classifier.pickle', 'wb')
+    f = open('tonality-analysis/my_classifier2.pickle', 'wb')
     pickle.dump(classifier, f, -1)
     f.close()
 
@@ -75,48 +75,69 @@ def load_classifier():
     Загрузка классификатора
     :return:
     """
-    f = open('tonality-analysis/my_classifier.pickle', 'rb')
+    f = open('tonality-analysis/my_classifier2.pickle', 'rb')
     classifier = pickle.load(f)
     f.close()
     return classifier
 
 
-# Получение твитов из файлов
-positive_tweets, negative_tweets = read_tweets()
+def learn_model():
+    """
+    Обучение модели для определения тональности предложения
+    """
+    # Получение твитов из файлов
+    positive_tweets, negative_tweets = read_tweets()
 
-# Возьмём по 10000 твитов из каждого набора
-positive_tweets = positive_tweets[:10000]
-negative_tweets = negative_tweets[:10000]
+    # Возьмём по 100000 твитов из каждого набора
+    positive_tweets = positive_tweets[:100000]
+    negative_tweets = negative_tweets[:100000]
 
-# Получение всех токенов в твитах
-positive_tweet_tokens = map(nltk.word_tokenize, positive_tweets)
-negative_tweet_tokens = map(nltk.word_tokenize, negative_tweets)
+    # Получение всех токенов в твитах
+    positive_tweet_tokens = map(nltk.word_tokenize, positive_tweets)
+    negative_tweet_tokens = map(nltk.word_tokenize, negative_tweets)
 
-# Получение 'чистых' токенов
-clean_positive_tweet_tokens = map(lemmatize_sentence, positive_tweet_tokens)
-clean_negative_tweet_tokens = map(lemmatize_sentence, negative_tweet_tokens)
+    # Получение 'чистых' токенов
+    clean_positive_tweet_tokens = map(lemmatize_sentence, positive_tweet_tokens)
+    clean_negative_tweet_tokens = map(lemmatize_sentence, negative_tweet_tokens)
 
-# Получение данных
-positive_tokens_for_model = get_tweets_for_model(clean_positive_tweet_tokens)
-negative_tokens_for_model = get_tweets_for_model(clean_negative_tweet_tokens)
+    # Получение данных
+    positive_tokens_for_model = get_tweets_for_model(
+        clean_positive_tweet_tokens)
+    negative_tokens_for_model = get_tweets_for_model(
+        clean_negative_tweet_tokens)
 
-positive_dataset = ((tweet_dict, 'Positive')
-                    for tweet_dict in positive_tokens_for_model)
-negative_dataset = ((tweet_dict, 'Negative')
-                    for tweet_dict in negative_tokens_for_model)
-dataset = list(chain(positive_dataset, negative_dataset))
-shuffle(dataset)
-train_data = dataset[:7000]
-test_data = dataset[7000:]
+    positive_dataset = ((tweet_dict, 'Positive')
+                        for tweet_dict in positive_tokens_for_model)
+    negative_dataset = ((tweet_dict, 'Negative')
+                        for tweet_dict in negative_tokens_for_model)
+    dataset = list(chain(positive_dataset, negative_dataset))
+    shuffle(dataset)
+    train_data = dataset[:70000]
+    test_data = dataset[70000:]
 
-classifier = NaiveBayesClassifier.train(train_data)
+    classifier = NaiveBayesClassifier.train(train_data)
 
-save_classifier(classifier)
+    save_classifier(classifier)
+    print('Accuracy is:', classify.accuracy(classifier, test_data))
 
-saved_classifer = load_classifier()
-print('Accuracy is:', classify.accuracy(saved_classifer, test_data))
 
-custom_tweet = 'Ненавижу людей'
-custom_tokens = lemmatize_sentence(nltk.word_tokenize(custom_tweet))
-print(custom_tweet,
-      saved_classifer.classify(dict([token, True] for token in custom_tokens)))
+def get_text_tonality(text: str):
+    """
+    Определение тональности предложения
+    """
+    saved_classifer = load_classifier()
+
+    tokens = lemmatize_sentence(nltk.word_tokenize(text))
+    print(text,
+          saved_classifer.classify(
+              dict([token, True] for token in tokens)
+          ))
+
+
+sentence = 'Сегодня , наконец , мы отправили письмо в адрес Президента ' \
+       'Российской Федерации Владимира Владимировича Путина по ' \
+       'выходке губернатора Краснодарского края Вениамина ' \
+       'Кондратьева ' \
+       ', который назвал , причем неоднократно , мусорную свалку ' \
+       'Мамаевым курганом , - указал волгоградец '
+get_text_tonality(sentence)
