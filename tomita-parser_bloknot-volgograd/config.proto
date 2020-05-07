@@ -6,7 +6,7 @@ TTextMinerConfig {
 		Dir = "bloknot-volgograd.ru/tomita-parser_bloknot-volgograd/input_articles"
 	}
 	Output = { 
-		File = "./bloknot-volgograd.ru/tomita-parser_bloknot-volgograd/output.txt" 
+		File = "./bloknot-volgograd.ru/tomita-parser_bloknot-volgograd/raw_output.txt" 
 		Format = text
 		Mode = append
 	}

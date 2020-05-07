@@ -65,9 +65,9 @@ VolgogradDesignator -> "волгоград" | "волгоградский" | "в
 FamousDesignators -> "писатель" | "губернатор" | "депутат" | "знаменитый" | "уважаемый" | "заслуженный";
 
 // Поиск в предложении известных волгоградцев
-SentenceWithVolgogradFamousPerson_1 -> (AnyWord*) VolgogradDesignator (AnyWord*) FamousDesignators (AnyWord*) (VolgogradDesignator) (AnyWord*) FIO interp(PersonFact.Name) (AnyWord*) (VolgogradDesignator) (AnyWord*);
-SentenceWithVolgogradFamousPerson_2 -> (AnyWord*) (VolgogradDesignator) (AnyWord*) FamousDesignators (AnyWord*) VolgogradDesignator (AnyWord*) FIO interp(PersonFact.Name) (AnyWord*) (VolgogradDesignator) (AnyWord*);
-SentenceWithVolgogradFamousPerson_3 -> (AnyWord*) (VolgogradDesignator) (AnyWord*) FamousDesignators (AnyWord*) (VolgogradDesignator) (AnyWord*) FIO interp(PersonFact.Name) (AnyWord*) VolgogradDesignator (AnyWord*);
+SentenceWithVolgogradFamousPerson_1 -> (AnyWord*) VolgogradDesignator (AnyWord*) FamousDesignators (AnyWord*) (VolgogradDesignator) (AnyWord*) FIO interp(PersonFact.Name::not_norm) (AnyWord*) (VolgogradDesignator) (AnyWord*);
+SentenceWithVolgogradFamousPerson_2 -> (AnyWord*) (VolgogradDesignator) (AnyWord*) FamousDesignators (AnyWord*) VolgogradDesignator (AnyWord*) FIO interp(PersonFact.Name::not_norm) (AnyWord*) (VolgogradDesignator) (AnyWord*);
+SentenceWithVolgogradFamousPerson_3 -> (AnyWord*) (VolgogradDesignator) (AnyWord*) FamousDesignators (AnyWord*) (VolgogradDesignator) (AnyWord*) FIO interp(PersonFact.Name::not_norm) (AnyWord*) VolgogradDesignator (AnyWord*);
 
 SentenceWithVolgogradFamousPerson -> SentenceWithVolgogradFamousPerson_1 | SentenceWithVolgogradFamousPerson_2 | SentenceWithVolgogradFamousPerson_3;
 
