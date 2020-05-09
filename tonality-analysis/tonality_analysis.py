@@ -3,6 +3,9 @@ import codecs
 import pickle
 import nltk
 import re
+import os
+import sys
+import inspect
 
 from nltk import NaiveBayesClassifier, classify
 from nltk.tag import pos_tag
@@ -11,6 +14,13 @@ from operator import itemgetter
 from pymystem3 import Mystem
 from itertools import chain
 from random import shuffle
+
+current_dir = os.path.dirname(
+    os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+from database import Database
+
 
 # Стоп-слова для очистки токенов
 STOP_WORDS = stopwords.words("russian")
@@ -121,23 +131,27 @@ def learn_model():
     print('Accuracy is:', classify.accuracy(classifier, test_data))
 
 
-def get_text_tonality(text: str):
+def get_phrases_tonality():
     """
-    Определение тональности предложения
+    Определение тональности предложений
     """
-    saved_classifer = load_classifier()
+    saved_classifier = load_classifier()
 
-    tokens = lemmatize_sentence(nltk.word_tokenize(text))
-    print(text,
-          saved_classifer.classify(
-              dict([token, True] for token in tokens)
-          ))
+    database = Database()
+    # fixme пока берем 50 статей
+    phrases = database.getPaginationPhrases(pageNum=1, pageSize=50)
+    for phrase in phrases:
+        tokens = lemmatize_sentence(nltk.word_tokenize(phrase['sentence']))
+        phrase['tonality'] = saved_classifier.classify(
+            dict([token, True] for token in tokens))
+
+    return phrases
 
 
-sentence = 'Сегодня , наконец , мы отправили письмо в адрес Президента ' \
-       'Российской Федерации Владимира Владимировича Путина по ' \
-       'выходке губернатора Краснодарского края Вениамина ' \
-       'Кондратьева ' \
-       ', который назвал , причем неоднократно , мусорную свалку ' \
-       'Мамаевым курганом , - указал волгоградец '
-get_text_tonality(sentence)
+def main():
+    result = get_phrases_tonality()
+    print(result)
+
+
+if __name__ == '__main__':
+    main()
