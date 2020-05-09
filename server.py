@@ -14,7 +14,7 @@ def index():
     else:
         nextPage = int(page) + 1
 
-    records = database.getPaginationRecords(page, 10)
+    records = database.getPaginationNews(page, 10)
     return render_template('index.html', records=records, nextPage=nextPage)
 
 @app.route('/change_shedule', methods=['POST'])
