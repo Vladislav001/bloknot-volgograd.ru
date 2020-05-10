@@ -3,9 +3,7 @@ import codecs
 import pickle
 import nltk
 import re
-import os
 import sys
-import inspect
 
 from nltk import NaiveBayesClassifier, classify
 from nltk.tag import pos_tag
@@ -15,10 +13,7 @@ from pymystem3 import Mystem
 from itertools import chain
 from random import shuffle
 
-current_dir = os.path.dirname(
-    os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir)
+sys.path.append('./')
 from database import Database
 
 
@@ -144,6 +139,7 @@ def get_phrases_tonality():
         tokens = lemmatize_sentence(nltk.word_tokenize(phrase['sentence']))
         phrase['tonality'] = saved_classifier.classify(
             dict([token, True] for token in tokens))
+        database.update_phrase(phrase)
 
     return phrases
 

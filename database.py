@@ -49,3 +49,15 @@ class Database:
         skips = int(pageSize) * (int(pageNum) - 1)
         data = self.collectionPhrases.find({}).skip(skips).limit(pageSize)
         return list(data)
+
+    def update_phrase(self, data):
+        """
+        Добавление тональности предложения в БД
+        """
+        new_data = {
+            'tonality': data['tonality'],
+        }
+        self.collectionPhrases.update_one(
+            {'_id': data['_id']},
+            {'$set': new_data},
+        )
