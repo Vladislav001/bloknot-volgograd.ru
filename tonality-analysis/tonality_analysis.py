@@ -9,7 +9,6 @@ from nltk import NaiveBayesClassifier, classify
 from nltk.tag import pos_tag
 from nltk.corpus import stopwords
 from operator import itemgetter
-from pymystem3 import Mystem
 from itertools import chain
 from random import shuffle
 
@@ -18,7 +17,7 @@ from database import Database
 
 
 # Стоп-слова для очистки токенов
-STOP_WORDS = stopwords.words("russian")
+STOP_WORDS = stopwords.words('russian')
 
 
 def read_tweets():
@@ -45,14 +44,11 @@ def lemmatize_sentence(tokens):
     :param tokens: токены одного твита
     :return: список 'чистых' токенов
     """
-    # mystem = Mystem()
-    # lemmatized_sentence = []
+
     cleaned_tokens = []
     for word, tag in pos_tag(tokens=tokens, lang='rus'):
         word = re.sub('[^А-Яа-я]', '', word)
-        # fixme нужна нормализация? Все слова получают тэг = 'S'
-        # lemmatized_sentence.append(mystem.lemmatize(word))
-        # word, _ = mystem.lemmatize(word)
+
         if word and word.lower() not in STOP_WORDS:
             cleaned_tokens.append(word.lower())
 
@@ -133,8 +129,7 @@ def get_phrases_tonality():
     saved_classifier = load_classifier()
 
     database = Database()
-    # fixme пока берем 50 статей
-    phrases = database.getPaginationPhrases(pageNum=1, pageSize=50)
+    phrases = database.getAllPhrases()
     for phrase in phrases:
         tokens = lemmatize_sentence(nltk.word_tokenize(phrase['sentence']))
         phrase['tonality'] = saved_classifier.classify(
