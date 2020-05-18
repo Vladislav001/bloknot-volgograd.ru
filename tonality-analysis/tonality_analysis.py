@@ -6,11 +6,11 @@ import re
 import sys
 
 from nltk import NaiveBayesClassifier, classify
-from nltk.tag import pos_tag
 from nltk.corpus import stopwords
 from operator import itemgetter
 from itertools import chain
 from random import shuffle
+from pymystem3 import Mystem
 
 sys.path.append('./')
 from database import Database
@@ -18,6 +18,8 @@ from database import Database
 
 # Стоп-слова для очистки токенов
 STOP_WORDS = stopwords.words('russian')
+
+MY_STEM = Mystem()
 
 
 def read_tweets():
@@ -46,11 +48,13 @@ def lemmatize_sentence(tokens):
     """
 
     cleaned_tokens = []
-    for word, tag in pos_tag(tokens=tokens, lang='rus'):
-        word = re.sub('[^А-Яа-я]', '', word)
 
-        if word and word.lower() not in STOP_WORDS:
-            cleaned_tokens.append(word.lower())
+    for token in tokens:
+        token = re.sub('[^А-Яа-я]', '', token)
+        if token:
+            normal_word, _ = MY_STEM.lemmatize(token.lower())
+            if normal_word not in STOP_WORDS:
+                cleaned_tokens.append(normal_word)
 
     return cleaned_tokens
 
@@ -66,7 +70,7 @@ def save_classifier(classifier):
     :param classifier:
     :return:
     """
-    f = open('tonality-analysis/my_classifier2.pickle', 'wb')
+    f = open('tonality-analysis/my_classifier4.pickle', 'wb')
     pickle.dump(classifier, f, -1)
     f.close()
 
@@ -76,7 +80,7 @@ def load_classifier():
     Загрузка классификатора
     :return:
     """
-    f = open('tonality-analysis/my_classifier2.pickle', 'rb')
+    f = open('tonality-analysis/my_classifier4.pickle', 'rb')
     classifier = pickle.load(f)
     f.close()
     return classifier
